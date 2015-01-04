@@ -8,6 +8,7 @@ which require an initialization must be listed explicitly in the list.")
 
 (defun slime/init-slime ()
   (use-package slime
+    :defer t
     :init
     (progn
       ;; Slime
