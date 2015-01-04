@@ -1,0 +1,94 @@
+;; -*- mode: emacs-lisp -*-
+;; This file is loaded by Spacemacs at startup.
+;; It must be stored in your home directory.
+
+;; Configuration Layers
+;; --------------------
+
+(setq-default
+ dotspacemacs-configuration-layer-path '()
+ dotspacemacs-configuration-layers '(osx
+                                     git
+                                     irony-mode
+                                     slime
+                                     nikki93)
+ dotspacemacs-excluded-packages '(evil-search-highlight-persist
+                                  git-gutter-fringe
+                                  popwin
+                                  guide-key-tip))
+
+;; Settings
+;; --------
+
+(setq-default
+ dotspacemacs-startup-banner nil
+ dotspacemacs-default-theme 'leuven
+ dotspacemacs-leader-key "SPC"
+ dotspacemacs-major-mode-leader-key ";"
+ dotspacemacs-command-key ":"
+ dotspacemacs-guide-key-delay 0.4
+ dotspacemacs-fullscreen-at-startup nil
+ dotspacemacs-maximized-at-startup t
+ dotspacemacs-active-transparency 90
+ dotspacemacs-inactive-transparency 90
+ dotspacemacs-mode-line-unicode-symbols t
+ dotspacemacs-smooth-scrolling t
+ dotspacemacs-feature-toggle-leader-on-jk nil
+ dotspacemacs-smartparens-strict-mode nil
+ dotspacemacs-persistent-server nil
+ dotspacemacs-default-package-repository nil)
+
+;; Initialization Hooks
+;; --------------------
+
+(defun dotspacemacs/init ()
+  (setq inferior-lisp-program "sbcl"))
+
+(defun dotspacemacs/config ()
+  (remove-hook 'prog-mode-hook 'ac-cc-mode-setup)
+  (setq ac-modes '(emacs-lisp-mode
+                   lisp-mode
+                   lisp-interaction-mode
+                   slime-repl-mode))
+  (setq company-global-modes '(c-mode
+                               cc-mode
+                               c++-mode
+                               objc-mode))
+
+  (when (eq system-type 'darwin)
+    (spacemacs/set-font "Menlo" 11)
+    (setq ns-use-native-fullscreen nil))
+
+  (setq-default fill-column 80)
+  (setq show-paren-delay 0)
+  (add-hook 'lisp-mode-hook 'show-paren-mode)
+
+  (setq c-default-style "bsd" c-basic-offset 4)
+  (c-set-offset 'case-label '+))
+
+; Custom variables
+;; ----------------
+
+;; Do not write anything in this section. This is where Emacs will
+;; auto-generate custom variable definitions.
+
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ahs-case-fold-search nil)
+ '(ahs-default-range (quote ahs-range-whole-buffer))
+ '(ahs-idle-interval 0.25)
+ '(ahs-idle-timer 0 t)
+ '(ahs-inhibit-face-list nil)
+ '(paradox-github-token t)
+ '(ring-bell-function (quote ignore) t))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
