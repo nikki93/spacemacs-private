@@ -47,7 +47,7 @@ which require an initialization must be listed explicitly in the list.")
   (use-package company
     :config
     (progn
-      (global-company-mode 1)
+      (global-company-mode 1)           ; set company-global-modes to taste
       (setq company-idle-delay 0.2
             company-selection-wrap-around t)
       (define-key company-active-map (kbd "\C-n") 'company-select-next)

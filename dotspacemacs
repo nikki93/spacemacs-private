@@ -45,7 +45,8 @@
   (setq inferior-lisp-program "sbcl"))
 
 (defun dotspacemacs/config ()
-  (remove-hook 'prog-mode-hook 'ac-cc-mode-setup)
+  (remove-hook 'prog-mode-hook 'auto-complete-mode)
+  (remove-hook 'c-mode-common-hook 'ac-cc-mode-setup)
   (setq ac-modes '(emacs-lisp-mode
                    lisp-mode
                    lisp-interaction-mode
