@@ -5,9 +5,11 @@
     auto-complete
     company
     flycheck
+    realgud
     magit
     diff-hl
-    glsl-mode)
+    glsl-mode
+    gotham-theme)
   "List of all packages to install and/or initialize. Built-in packages
 which require an initialization must be listed explicitly in the list.")
 
@@ -45,6 +47,7 @@ which require an initialization must be listed explicitly in the list.")
 
 (defun nikki93/init-company ()
   (use-package company
+    :defer t
     :config
     (progn
       (global-company-mode 1)           ; set company-global-modes to taste
@@ -63,10 +66,8 @@ which require an initialization must be listed explicitly in the list.")
     :defer t
     :config
     (progn
-      (setq flycheck-check-syntax-automatically '(save
-                                                  idle-change
-                                                  new-line
-                                                  mode-enabled)))))
+      (define-key evil-normal-state-map "[e" 'flycheck-previous-error)
+      (define-key evil-normal-state-map "]e" 'flycheck-next-error))))
 
 (defun nikki93/init-magit ()
   (use-package magit

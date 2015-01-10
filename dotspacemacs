@@ -42,7 +42,9 @@
 ;; --------------------
 
 (defun dotspacemacs/init ()
-  (setq inferior-lisp-program "sbcl"))
+  (defadvice load-theme 
+      (before theme-dont-propagate activate)
+    (mapcar #'disable-theme custom-enabled-themes)))
 
 (defun dotspacemacs/config ()
   (remove-hook 'prog-mode-hook 'auto-complete-mode)

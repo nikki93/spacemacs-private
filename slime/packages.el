@@ -11,7 +11,11 @@ which require an initialization must be listed explicitly in the list.")
     :defer t
     :init
     (progn
+      (evil-leader/set-key-for-mode 'lisp-mode "mj" 'slime))
+    :config
+    (progn
       ;; Slime
+      (setq inferior-lisp-program "sbcl")
       (require 'slime-autoloads)
       (setq slime-contribs '(slime-fancy
                              slime-fuzzy
@@ -28,14 +32,14 @@ which require an initialization must be listed explicitly in the list.")
       (eval-after-load "auto-complete"
         '(add-to-list 'ac-modes 'slime-repl-mode))
 
-      ;; Mode-line icon
-      (spacemacs|diminish slime-mode " Ⓛ" " SL"))
-    :config
-    (progn
-      (evil-leader/set-key-for-mode 'lisp-mode
-        ;; Launch slime
-        "mj"  'slime
+      ;; Paredit
+      (add-hook 'slime-repl-mode-hook 'paredit-mode)
 
+      ;; Mode-line icon
+      (spacemacs|diminish slime-mode " Ⓛ" " SL")
+
+      ;; Evil keys
+      (evil-leader/set-key-for-mode 'lisp-mode
         ;; Evaluation
         "mes" 'slime-eval-last-expression
         "mee" 'slime-eval-defun
@@ -100,10 +104,12 @@ which require an initialization must be listed explicitly in the list.")
 
 (defun slime/init-paredit ()
   (use-package paredit
+    :defer t
     :init
     (progn
-      (add-hook 'lisp-mode-hook 'paredit-mode)
-      (add-hook 'slime-repl-mode-hook 'enable-paredit-mode)
+      (add-hook 'lisp-mode-hook 'paredit-mode))
+    :config
+    (progn
       (add-hook 'slime-repl-mode-hook   ; Respect paredit deletion in repl
                 (lambda ()
                   (define-key slime-repl-mode-map
