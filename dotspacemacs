@@ -8,6 +8,7 @@
 (setq-default
  dotspacemacs-configuration-layer-path '()
  dotspacemacs-configuration-layers '(osx
+                                     auctex
                                      git
                                      irony-mode
                                      slime

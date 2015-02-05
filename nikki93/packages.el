@@ -8,6 +8,7 @@
     realgud
     magit
     diff-hl
+    auctex
     glsl-mode
     gotham-theme)
   "List of all packages to install and/or initialize. Built-in packages
@@ -82,6 +83,24 @@ which require an initialization must be listed explicitly in the list.")
   (use-package diff-hl
     :init
     (global-diff-hl-mode)))
+
+(defun auctex/init-auctex ()
+  (use-package tex
+    :defer t
+    :config
+    (progn
+      (defun auctex/build ()
+        (interactive)
+        (if (buffer-modified-p)
+            (progn
+              (let ((TeX-save-query nil))
+                (TeX-save-document (TeX-master-file)))
+              (setq build-proc (TeX-command "LaTeX" 'TeX-master-file -1))
+              (set-process-sentinel  build-proc  'auctex/build-sentinel))))
+
+      (evil-leader/set-key-for-mode 'latex-mode
+        "mb" 'auctex/build
+        "mv" 'auctex/build-view))))
 
 (defun nikki93/init-glsl-mode ())
 
