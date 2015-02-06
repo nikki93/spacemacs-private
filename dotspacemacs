@@ -59,6 +59,8 @@
                                c++-mode
                                objc-mode))
 
+  (add-hook 'lisp-mode-hook 'aggressive-indent-mode)
+
   (when (eq system-type 'darwin)
     (spacemacs/set-font "Menlo" 11)
     (setq ns-use-native-fullscreen nil))
