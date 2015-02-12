@@ -33,13 +33,13 @@
      (list (cons 'fullscreen next)))))
 
 (defun eshell/ag (&rest args)
-  (let ((ag-highlight-search t))
-    (compilation-start
-     (mapconcat 'shell-quote-argument
-                (append (list ag-executable
-                              "--color" "--color-match" "30;43"
-                              "--smart-case" "--nogroup" "--column" "--")
-                        (nikki93/flatten args)) " ")
-     'ag-mode)))
+  (setq ag-highlight-search t)
+  (compilation-start
+   (mapconcat 'shell-quote-argument
+              (append (list ag-executable
+                            "--color" "--color-match" "30;43"
+                            "--smart-case" "--nogroup" "--column" "--")
+                      (nikki93/flatten args)) " ")
+   'ag-mode))
 
 
