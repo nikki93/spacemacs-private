@@ -1,51 +1,65 @@
-;; -*- mode: emacs-lisp -*-
+;; -*- mode: dotspacemacs -*-
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
-;; Configuration Layers
-;; --------------------
-
-(setq-default
- dotspacemacs-configuration-layer-path '()
- dotspacemacs-configuration-layers '(osx
-                                     auctex
-                                     git
-                                     irony-mode
-                                     slime
-                                     nikki93)
- dotspacemacs-excluded-packages '(evil-search-highlight-persist
-                                  git-gutter-fringe
-                                  popwin
-                                  guide-key-tip))
-
-;; Settings
-;; --------
-
-(setq-default
- dotspacemacs-startup-banner nil
- dotspacemacs-default-theme 'leuven
- dotspacemacs-leader-key "SPC"
- dotspacemacs-major-mode-leader-key ";"
- dotspacemacs-command-key ":"
- dotspacemacs-guide-key-delay 0.4
- dotspacemacs-fullscreen-at-startup nil
- dotspacemacs-maximized-at-startup t
- dotspacemacs-active-transparency 90
- dotspacemacs-inactive-transparency 90
- dotspacemacs-mode-line-unicode-symbols t
- dotspacemacs-smooth-scrolling t
- dotspacemacs-feature-toggle-leader-on-jk nil
- dotspacemacs-smartparens-strict-mode nil
- dotspacemacs-persistent-server nil
- dotspacemacs-default-package-repository nil)
-
-;; Initialization Hooks
-;; --------------------
+(defun dotspacemacs/layers ()
+  "Configuration Layers declaration."
+  (setq-default
+   dotspacemacs-configuration-layer-path '()
+   dotspacemacs-configuration-layers '(osx
+                                       auctex
+                                       git
+                                       irony-mode
+                                       slime
+                                       fsharp
+                                       lua
+                                       nikki93)
+   dotspacemacs-excluded-packages '(evil-search-highlight-persist
+                                    git-gutter-fringe
+                                    ;popwin
+                                    guide-key-tip)
+   dotspacemacs-delete-orphan-packages t))
 
 (defun dotspacemacs/init ()
-  (defadvice load-theme 
+  (defadvice load-theme
       (before theme-dont-propagate activate)
-    (mapcar #'disable-theme custom-enabled-themes)))
+    (mapcar #'disable-theme custom-enabled-themes))(setq-default
+
+   dotspacemacs-editing-style 'vim
+   dotspacemacs-verbose-loading nil
+   dotspacemacs-startup-banner nil
+   dotspacemacs-always-show-changelog t
+   dotspacemacs-startup-lists nil
+   dotspacemacs-themes '(leuven
+                         solarized-light
+                         solarized-dark
+                         monokai
+                         zenburn)
+   dotspacemacs-colorize-cursor-according-to-state t
+   dotspacemacs-default-font '("Menlo"
+                               :size 11
+                               :weight normal
+                               :width normal
+                               :powerline-scale 1.1)
+   dotspacemacs-leader-key "SPC"
+   dotspacemacs-emacs-leader-key "M-m"
+   dotspacemacs-major-mode-leader-key ";"
+   dotspacemacs-major-mode-emacs-leader-key "C-M-m"
+   dotspacemacs-command-key ":"
+   dotspacemacs-enable-paste-micro-state t
+   dotspacemacs-guide-key-delay 0.4
+   dotspacemacs-loading-progress-bar t
+   dotspacemacs-fullscreen-at-startup nil
+   dotspacemacs-fullscreen-use-non-native t
+   dotspacemacs-maximized-at-startup t
+   dotspacemacs-active-transparency 90
+   dotspacemacs-inactive-transparency 90
+   dotspacemacs-mode-line-unicode-symbols t
+   dotspacemacs-smooth-scrolling t
+   dotspacemacs-smartparens-strict-mode nil
+   dotspacemacs-persistent-server nil
+   dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
+   dotspacemacs-default-package-repository nil))
 
 (defun dotspacemacs/config ()
   (remove-hook 'prog-mode-hook 'auto-complete-mode)
@@ -60,14 +74,10 @@
                                objc-mode))
 
   (add-hook 'lisp-mode-hook 'aggressive-indent-mode)
-
-  (when (eq system-type 'darwin)
-    (spacemacs/set-font "Menlo" 11)
-    (setq ns-use-native-fullscreen nil))
+  (setq show-paren-delay 0)
+  (add-hook 'lisp-mode-hook 'show-paren-mode)
 
   (when (eq system-type 'windows-nt)
-    (spacemacs/set-font "Source Code Pro" 9)
-
     (setq w32-lwindow-modifier 'hyper)
     (global-set-key (kbd "H-1") 'select-window-1)
     (global-set-key (kbd "H-2") 'select-window-2)
@@ -85,12 +95,35 @@
     (add-to-list 'default-frame-alist '(height . 83))
     (add-to-list 'default-frame-alist '(width . 327)))
 
+  (global-set-key (kbd "C-c 1") 'select-window-1)
+  (global-set-key (kbd "C-c 2") 'select-window-2)
+  (global-set-key (kbd "C-c 3") 'select-window-3)
+  (global-set-key (kbd "C-c 4") 'select-window-4)
+  (global-set-key (kbd "C-c 5") 'select-window-5)
+  (global-set-key (kbd "C-c 6") 'select-window-6)
+  (global-set-key (kbd "C-c 7") 'select-window-7)
+
   (setq-default fill-column 80)
-  (setq show-paren-delay 0)
-  (add-hook 'lisp-mode-hook 'show-paren-mode)
 
   (setq c-default-style "bsd" c-basic-offset 4)
   (c-set-offset 'case-label '+))
+
+;; Configuration Layers
+;; --------------------
+
+(setq-default
+ dotspacemacs-configuration-layer-path '()
+ dotspacemacs-configuration-layers '(osx
+                                     auctex
+                                     git
+                                     irony-mode
+                                     slime
+                                     fsharp
+                                     nikki93)
+ dotspacemacs-excluded-packages '(evil-search-highlight-persist
+                                  git-gutter-fringe
+                                  popwin
+                                  guide-key-tip))
 
 ; Custom variables
 ;; ----------------

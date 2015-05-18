@@ -33,13 +33,31 @@
      (list (cons 'fullscreen next)))))
 
 (defun eshell/ag (&rest args)
-  (let ((ag-highlight-search t))
-    (compilation-start
-     (mapconcat 'shell-quote-argument
-                (append (list ag-executable
-                              "--color" "--color-match" "30;43"
-                              "--smart-case" "--nogroup" "--column" "--")
-                        (nikki93/flatten args)) " ")
-     'ag-mode)))
+  (setq ag-highlight-search t)
+  (compilation-start
+   (mapconcat 'shell-quote-argument
+              (append (list ag-executable
+                            "--color" "--color-match" "30;43"
+                            "--smart-case" "--nogroup" "--column" "--")
+                      (nikki93/flatten args)) " ")
+   'ag-mode))
+
+(setq nikki93/cgame-path "/Users/nikki/Development/cgame/")
+(setq nikki93/cgame-scratch-path (concat nikki93/cgame-path "/usr/scratch.lua"))
+(defun nikki93/cgame-scratch (&optional start end)
+  (interactive (if (use-region-p)
+                   (list (region-beginning) (region-end))
+                 (list nil nil)))
+  (if (and start end)
+      (let ((buf (current-buffer))
+            (n (count-lines 1 start)))
+        (with-temp-buffer
+          (while (> n 0) (insert "\n") (setq n (- n 1)))
+          (insert-buffer-substring buf start end)
+          (write-file nikki93/cgame-scratch-path)))
+    (let ((buf (current-buffer)))
+      (with-temp-buffer
+        (insert-buffer-substring buf)
+        (write-file nikki93/cgame-scratch-path)))))
 
 
