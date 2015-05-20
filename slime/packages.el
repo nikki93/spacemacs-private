@@ -6,6 +6,18 @@
   "List of all packages to install and/or initialize. Built-in packages
 which require an initialization must be listed explicitly in the list.")
 
+(defun slime/init-ac-slime ()
+  (use-package ac-slime
+    :defer t
+    :init
+    (progn
+      (add-hook 'slime-mode-hook (lambda () (set-up-slime-ac t)))
+      (add-hook 'slime-mode-hook (lambda () (auto-complete-mode)))
+      (add-hook 'slime-repl-mode-hook (lambda () (set-up-slime-ac t)))
+      (add-hook 'slime-repl-mode-hook (lambda () (auto-complete-mode)))
+      (eval-after-load "auto-complete"
+        '(add-to-list 'ac-modes 'slime-repl-mode)))))
+
 (defun slime/init-slime ()
   (use-package slime
     :defer t
@@ -25,12 +37,6 @@ which require an initialization must be listed explicitly in the list.")
             slime-repl-return-behaviour :send-only-if-after-complete
             slime-inhibit-pipelining nil)
       (slime-setup)
-
-      ;; Auto-complete
-      (add-hook 'slime-mode-hook (lambda () (set-up-slime-ac t)))
-      (add-hook 'slime-repl-mode-hook (lambda () (set-up-slime-ac t)))
-      (eval-after-load "auto-complete"
-        '(add-to-list 'ac-modes 'slime-repl-mode))
 
       ;; Paredit
       (add-hook 'slime-repl-mode-hook 'paredit-mode)
