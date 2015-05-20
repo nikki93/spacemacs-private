@@ -60,6 +60,8 @@
                                objc-mode))
 
   (add-hook 'lisp-mode-hook 'aggressive-indent-mode)
+  (load "~/quicklisp/log4slime-setup.el")
+  (global-log4slime-mode 1)
 
   (when (eq system-type 'darwin)
     (spacemacs/set-font "Menlo" 11)
