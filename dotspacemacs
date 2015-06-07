@@ -94,6 +94,7 @@ layers configuration."
     (global-set-key (kbd "H-5") 'select-window-5)
     (global-set-key (kbd "H-6") 'select-window-6)
     (global-set-key (kbd "H-7") 'select-window-7))
+  (global-set-key (kbd "M-o") 'other-frame)
 
   (setq-default fill-column 80))
 
