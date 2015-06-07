@@ -61,6 +61,40 @@
 ;;       (define-key company-active-map (kbd "<tab>") 'company-complete)
 ;;       (spacemacs|diminish company-mode " Ⓒ" " C"))))
 
+(defun nikki93/init-aggressive-indent ()
+  (use-package aggressive-indent
+    :defer t
+    :init
+    (progn
+      (add-hook 'slime-repl-mode-hook 'aggressive-indent-mode)
+      (add-hook 'clojure-mode-hook 'aggressive-indent-mode)
+      (add-hook 'cider-repl-mode-hook 'aggressive-indent-mode)
+      (add-hook 'emacs-lisp-mode-hook 'aggressive-indent-mode)
+      (add-hook 'lisp-mode-hook 'aggressive-indent-mode))))
+
+(defun nikki93/init-paredit ()
+  (use-package paredit
+    :defer t
+    :init
+    (progn
+      (define-key paredit-mode-map (kbd "M-{") 'paredit-wrap-curly)
+      (define-key paredit-mode-map (kbd "M-[") 'paredit-wrap-square)
+      (add-hook 'slime-repl-mode-hook 'paredit-mode)
+      (add-hook 'clojure-mode-hook 'paredit-mode)
+      (add-hook 'cider-repl-mode-hook 'paredit-mode)
+      (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
+      (add-hook 'lisp-mode-hook 'paredit-mode))
+    :config
+    (progn
+      (add-hook 'slime-repl-mode-hook   ; Respect paredit deletion in repl
+                (lambda ()
+                  (define-key slime-repl-mode-map
+                    (read-kbd-macro paredit-backward-delete-key)
+                    nil)))
+
+      ;; Mode-line icon
+      (spacemacs|diminish paredit-mode " (Ⓟ)" " (P)"))))
+
 (defun nikki93/init-flycheck ()
   (use-package flycheck
     :defer t
