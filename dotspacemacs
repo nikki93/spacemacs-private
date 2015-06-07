@@ -14,6 +14,7 @@
                                        syntax-checking
                                        irony-mode
                                        slime-nikki93
+                                       clojure
                                        nikki93)
    dotspacemacs-excluded-packages '(git-gutter-fringe)
    dotspacemacs-delete-orphan-packages t))
