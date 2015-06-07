@@ -27,8 +27,7 @@
   (use-package fill-column-indicator
     :init
     (progn
-      (add-hook 'lisp-mode-hook 'fci-mode)
-      (add-hook 'c-mode-common-hook 'fci-mode))))
+      (add-hook 'prog-mode-hook 'fci-mode))))
 
 (defun nikki93/init-neotree ()
   (use-package neotree
