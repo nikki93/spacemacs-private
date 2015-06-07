@@ -1,13 +1,10 @@
-(defvar irony-mode-packages
+(setq irony-mode-packages
   '(irony
     company-irony
-    flycheck-irony)
-  "List of all packages to install and/or initialize. Built-in packages
-which require an initialization must be listed explicitly in the list.")
+    flycheck-irony))
 
-(defvar irony-mode-excluded-packages
-  '(auto-complete-clang)
-  "Packages that use auto-complete that are no longer necessary and might conflict.")
+(setq irony-mode-excluded-packages
+  '(auto-complete-clang))
 
 (defun irony-mode/init-irony ()
   (use-package irony

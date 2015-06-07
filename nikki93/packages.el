@@ -1,22 +1,21 @@
-(defvar nikki93-packages
-  '(helm
-    fill-column-indicator
-    neotree
-    elm-mode
-    ;; auto-complete
-    ;; company
-    flycheck
-    magit
-    diff-hl
-    auctex
-    glsl-mode
-    gotham-theme)
-  "List of all packages to install and/or initialize. Built-in packages
-which require an initialization must be listed explicitly in the list.")
+(setq nikki93-packages
+      '(helm
+        fill-column-indicator
+        neotree
+        elm-mode
+        ;; auto-complete
+        ;; company
+        aggressive-indent
+        paredit
+        flycheck
+        magit
+        diff-hl
+        auctex
+        glsl-mode
+        gotham-theme))
 
-(defvar nikki93-excluded-packages
-  '(git-gutter-fringe)
-  "List of packages to exclude.")
+(setq nikki93-excluded-packages
+      '(git-gutter-fringe))
 
 (defun nikki93/init-helm ()
   (use-package helm
