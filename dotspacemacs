@@ -13,7 +13,7 @@
                                        auto-completion
                                        syntax-checking
                                        irony-mode
-                                       slime
+                                       slime-nikki93
                                        nikki93)
    dotspacemacs-excluded-packages '(git-gutter-fringe)
    dotspacemacs-delete-orphan-packages t))

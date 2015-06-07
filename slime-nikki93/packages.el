@@ -1,12 +1,8 @@
-(defvar slime-packages
+(setq slime-nikki93-packages
   '(slime
-    ac-slime
-    ;; slime-company
-    paredit)
-  "List of all packages to install and/or initialize. Built-in packages
-which require an initialization must be listed explicitly in the list.")
+    ac-slime))
 
-(defun slime/init-ac-slime ()
+(defun slime-nikki93/init-ac-slime ()
   (use-package ac-slime
     :defer t
     :init
@@ -18,7 +14,7 @@ which require an initialization must be listed explicitly in the list.")
       (eval-after-load "auto-complete"
         '(add-to-list 'ac-modes 'slime-repl-mode)))))
 
-(defun slime/init-slime ()
+(defun slime-nikki93/init-slime ()
   (use-package slime
     :defer t
     :init
@@ -37,9 +33,6 @@ which require an initialization must be listed explicitly in the list.")
             slime-repl-return-behaviour :send-only-if-after-complete
             slime-inhibit-pipelining nil)
       (slime-setup)
-
-      ;; Paredit
-      (add-hook 'slime-repl-mode-hook 'paredit-mode)
 
       ;; Mode-line icon
       (spacemacs|diminish slime-mode " Ⓛ" " SL")
@@ -107,21 +100,4 @@ which require an initialization must be listed explicitly in the list.")
         "mpf" 'slime-toggle-profile-fdefinition
         "mpp" 'slime-profile-package
         "mps" 'slime-profile-by-substring))))
-
-(defun slime/init-paredit ()
-  (use-package paredit
-    :defer t
-    :init
-    (progn
-      (add-hook 'lisp-mode-hook 'paredit-mode))
-    :config
-    (progn
-      (add-hook 'slime-repl-mode-hook   ; Respect paredit deletion in repl
-                (lambda ()
-                  (define-key slime-repl-mode-map
-                    (read-kbd-macro paredit-backward-delete-key)
-                    nil)))
-
-      ;; Mode-line icon
-      (spacemacs|diminish paredit-mode " (Ⓟ)" " (P)"))))
 
