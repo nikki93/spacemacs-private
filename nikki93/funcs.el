@@ -44,20 +44,34 @@
 
 (setq nikki93/cgame-path "/Users/nikki/Development/cgame/")
 (setq nikki93/cgame-scratch-path (concat nikki93/cgame-path "/usr/scratch.lua"))
+
 (defun nikki93/cgame-scratch (&optional start end)
   (interactive (if (use-region-p)
                    (list (region-beginning) (region-end))
-                 (list nil nil)))
-  (if (and start end)
-      (let ((buf (current-buffer))
-            (n (count-lines 1 start)))
-        (with-temp-buffer
-          (while (> n 0) (insert "\n") (setq n (- n 1)))
-          (insert-buffer-substring buf start end)
-          (write-file nikki93/cgame-scratch-path)))
-    (let ((buf (current-buffer)))
-      (with-temp-buffer
-        (insert-buffer-substring buf)
-        (write-file nikki93/cgame-scratch-path)))))
+                 (let* ((pos (point))
+                        (search
+                         (save-excursion
+                           (list (if (save-match-data (looking-at "^function[ \t]"))
+                                     (point) ; already at start
+                                   (end-of-line)
+                                   (lua-beginning-of-proc)
+                                   (if (= pos (point))
+                                       (1+ pos) ; should have moved back
+                                     (point)))
+                                 (progn (lua-end-of-proc) (point))))))
+                   (if (and (>= pos (car search)) (< pos (cadr search)))
+                       search       ; we are in a function definition!
+                     (save-excursion    ; we're not, just send current line
+                       (list (progn (beginning-of-line) (point))
+                             (progn (end-of-line) (point))))))))
+
+  (let ((scratch-path nikki93/cgame-scratch-path)   ; save buffer-local value
+        (buf (current-buffer))
+        (n (count-lines 1 start)))
+    (with-temp-buffer
+      (insert "--[[" (or (buffer-file-name buf) "unknown") "--]]")
+      (while (> n 0) (insert "\n") (setq n (- n 1)))
+      (insert-buffer-substring buf start end)
+      (write-file scratch-path))))
 
 

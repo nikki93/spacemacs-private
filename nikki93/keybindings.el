@@ -3,3 +3,5 @@
 (define-key global-map (kbd "M-s") 'save-buffer)
 (define-key evil-normal-state-map ",r" 'nikki93/cgame-scratch)
 (define-key evil-visual-state-map ",r" 'nikki93/cgame-scratch)
+(define-key evil-normal-state-map ";r" 'nikki93/cgame-scratch)
+(define-key evil-visual-state-map ";r" 'nikki93/cgame-scratch)
