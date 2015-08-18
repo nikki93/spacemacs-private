@@ -62,8 +62,12 @@
                    (if (and (>= pos (car search)) (< pos (cadr search)))
                        search       ; we are in a function definition!
                      (save-excursion    ; we're not, just send current line
-                       (list (progn (backward-paragraph) (point))
+                       (list (progn (backward-paragraph) (1+ (point)))
                              (progn (forward-paragraph) (point))))))))
+
+  (let ((overlay (make-overlay start end)))
+    (overlay-put overlay 'face 'secondary-selection)
+    (run-with-timer 0.2 nil 'delete-overlay overlay))
 
   (let ((scratch-path nikki93/cgame-scratch-path)   ; save buffer-local value
         (buf (current-buffer))
