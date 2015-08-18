@@ -62,8 +62,8 @@
                    (if (and (>= pos (car search)) (< pos (cadr search)))
                        search       ; we are in a function definition!
                      (save-excursion    ; we're not, just send current line
-                       (list (progn (beginning-of-line) (point))
-                             (progn (end-of-line) (point))))))))
+                       (list (progn (backward-paragraph) (point))
+                             (progn (forward-paragraph) (point))))))))
 
   (let ((scratch-path nikki93/cgame-scratch-path)   ; save buffer-local value
         (buf (current-buffer))
