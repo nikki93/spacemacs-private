@@ -7,6 +7,7 @@
   (setq-default
    dotspacemacs-configuration-layer-path '()
    dotspacemacs-configuration-layers '(osx
+                                       version-control
                                        git
                                        fsharp
                                        lua
@@ -14,9 +15,20 @@
                                        syntax-checking
                                        irony-mode
                                        slime-nikki93
+                                       factor
                                        clojure
+                                       purescript
+                                       (javascript :variables
+                                                   js2-basic-offset 2
+                                                   js-indent-level 2)
+                                       haskell
+                                       python
+                                       racket
+                                       markdown
                                        nikki93)
    dotspacemacs-excluded-packages '(git-gutter-fringe)
+   dotspacemacs-additional-packages '(cyberpunk-theme
+                                      ag)
    dotspacemacs-delete-orphan-packages t))
 
 (defun dotspacemacs/init ()
@@ -29,7 +41,8 @@ before layers configuration."
    dotspacemacs-startup-banner 'official
    dotspacemacs-always-show-changelog t
    dotspacemacs-startup-lists nil
-   dotspacemacs-themes '(leuven
+   dotspacemacs-themes '(cyberpunk
+                         leuven
                          solarized-light
                          solarized-dark
                          monokai
@@ -57,8 +70,8 @@ before layers configuration."
    dotspacemacs-fullscreen-at-startup nil
    dotspacemacs-fullscreen-use-non-native nil
    dotspacemacs-maximized-at-startup nil
-   dotspacemacs-active-transparency 90
-   dotspacemacs-inactive-transparency 90
+   dotspacemacs-active-transparency 70
+   dotspacemacs-inactive-transparency 70
    dotspacemacs-mode-line-unicode-symbols t
    dotspacemacs-smooth-scrolling t
    dotspacemacs-smartparens-strict-mode nil
@@ -70,6 +83,9 @@ before layers configuration."
   "Configuration function.
  This function is called at the very end of Spacemacs initialization after
 layers configuration."
+  (set-frame-parameter (selected-frame) 'alpha '(85 85))
+  (add-to-list 'default-frame-alist '(alpha 85 85))
+
   (remove-hook 'prog-mode-hook 'auto-complete-mode)
   (remove-hook 'c-mode-common-hook 'ac-cc-mode-setup)
   (setq ac-modes '(emacs-lisp-mode
@@ -85,6 +101,8 @@ layers configuration."
   (load "~/quicklisp/log4slime-setup.el")
   (global-log4slime-mode 1)
 
+  (setq powerline-default-separator nil)
+
   (when (eq system-type 'windows-nt)
     (setq w32-lwindow-modifier 'hyper)
     (global-set-key (kbd "H-1") 'select-window-1)
@@ -96,7 +114,33 @@ layers configuration."
     (global-set-key (kbd "H-7") 'select-window-7))
   (global-set-key (kbd "M-o") 'other-frame)
 
-  (setq-default fill-column 80))
+  (setq-default fill-column 80)
+
+  (setq haskell-hoogle-command "hoogle"))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ahs-case-fold-search nil)
+ '(ahs-default-range (quote ahs-range-whole-buffer))
+ '(ahs-idle-interval 0.25)
+ '(ahs-idle-timer 0 t)
+ '(ahs-inhibit-face-list nil)
+ '(paradox-github-token t)
+ '(ring-bell-function (quote ignore) t)
+ '(safe-local-variable-values
+   (quote
+    ((nikki93/cgame-scratch-path . "/Users/nikki/Library/Application Support/LOVE/pgame/scratch-buf.lua")
+     (nikki93/cgame-scratch-path . "/Users/nikki/Library/Application Support/LOVE/love-test/scratch-buf.lua")
+     (nikki93/cgame-scratch-path . "/Users/nikki/Library/Application Support/LOVE/love-test/scratch.lua")))))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(company-tooltip-common ((t (:inherit company-tooltip :weight bold :underline nil))))
+ '(company-tooltip-common-selection ((t (:inherit company-tooltip-selection :weight bold :underline nil)))))
