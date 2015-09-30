@@ -8,9 +8,11 @@
         aggressive-indent
         paredit
         flycheck
+        skewer-mode
         magit
-        diff-hl
+        ;; diff-hl
         auctex
+        shm
         glsl-mode
         gotham-theme))
 
@@ -27,7 +29,9 @@
   (use-package fill-column-indicator
     :init
     (progn
-      (add-hook 'prog-mode-hook 'fci-mode))))
+      (add-hook 'prog-mode-hook 'fci-mode))
+    :config
+    (setq fci-rule-character ?\u2503)))
 
 (defun nikki93/init-neotree ()
   (use-package neotree
@@ -76,15 +80,18 @@
     :defer t
     :init
     (progn
-      (define-key paredit-mode-map (kbd "M-{") 'paredit-wrap-curly)
-      (define-key paredit-mode-map (kbd "M-[") 'paredit-wrap-square)
       (add-hook 'slime-repl-mode-hook 'paredit-mode)
       (add-hook 'clojure-mode-hook 'paredit-mode)
       (add-hook 'cider-repl-mode-hook 'paredit-mode)
       (add-hook 'emacs-lisp-mode-hook 'paredit-mode)
-      (add-hook 'lisp-mode-hook 'paredit-mode))
+      (add-hook 'lisp-mode-hook 'paredit-mode)
+      (add-hook 'racket-mode-hook 'paredit-mode)
+      (add-hook 'racket-repl-mode-hook 'paredit-mode))
     :config
     (progn
+      (define-key paredit-mode-map (kbd "M-{") 'paredit-wrap-curly)
+      (define-key paredit-mode-map (kbd "M-[") 'paredit-wrap-square)
+
       (add-hook 'slime-repl-mode-hook   ; Respect paredit deletion in repl
                 (lambda ()
                   (define-key slime-repl-mode-map
@@ -100,7 +107,29 @@
     :config
     (progn
       (define-key evil-normal-state-map "[e" 'flycheck-previous-error)
-      (define-key evil-normal-state-map "]e" 'flycheck-next-error))))
+      (define-key evil-normal-state-map "]e" 'flycheck-next-error)
+
+      ;; disable jshint since we prefer eslint checking
+      (setq-default flycheck-disabled-checkers
+                    (append flycheck-disabled-checkers
+                            '(javascript-jshint)))
+
+      ;; use eslint with web-mode for jsx files
+      (flycheck-add-mode 'javascript-eslint 'web-mode)
+
+      ;; disable json-jsonlist checking for json files
+      (setq-default flycheck-disabled-checkers
+                    (append flycheck-disabled-checkers
+                            '(json-jsonlist))))))
+
+(defun nikki93/init-skewer-mode ()
+  (use-package skewer-mode
+    :defer t
+    :init
+    (progn
+      (add-hook 'js2-mode-hook 'skewer-mode)
+      (add-hook 'css-mode-hook 'skewer-css-mode)
+      (add-hook 'html-mode-hook 'skewer-html-mode))))
 
 (defun nikki93/init-magit ()
   (use-package magit
@@ -108,13 +137,7 @@
     :config
     (progn
       (setq magit-save-some-buffers nil)
-      (define-key magit-status-mode-map (kbd "q") 'magit-mode-quit-window)
       (setq magit-status-buffer-switch-function 'switch-to-buffer))))
-
-(defun nikki93/init-diff-hl ()
-  (use-package diff-hl
-    :init
-    (global-diff-hl-mode)))
 
 (defun auctex/init-auctex ()
   (use-package tex
@@ -141,4 +164,15 @@
 (defun nikki93/init-glsl-mode ())
 
 (defun nikki93/init-elm-mode ())
+
+(defun nikki93/init-shm ()
+  (use-package shm
+    :defer t
+    :if haskell-enable-shm-support
+    :init
+    (add-hook 'haskell-mode-hook 'structured-haskell-mode)
+    :config
+    (progn
+      (set-face-background 'shm-current-face "#eee8d5")
+      (set-face-background 'shm-quarantine-face "lemonchiffon"))))
 
