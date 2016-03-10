@@ -1,70 +1,31 @@
 (setq nikki93-packages
       '(helm
-        fill-column-indicator
         neotree
         elm-mode
-        ;; auto-complete
-        ;; company
         aggressive-indent
         paredit
         flycheck
-        skewer-mode
+        tern
         magit
-        ;; diff-hl
         auctex
-        shm
         glsl-mode
-        gotham-theme))
+        darkroom
+        ))
 
-(setq nikki93-excluded-packages
-      '(git-gutter-fringe))
-
-(defun nikki93/init-helm ()
+(defun nikki93/post-init-helm ()
   (use-package helm
     :defer t
     :config
     (setq helm-split-window-in-side-p t)))
 
-(defun nikki93/init-fill-column-indicator ()
-  (use-package fill-column-indicator
-    :init
-    (progn
-      (add-hook 'prog-mode-hook 'fci-mode))
-    :config
-    (setq fci-rule-character ?\u2503)))
-
-(defun nikki93/init-neotree ()
+(defun nikki93/post-init-neotree ()
   (use-package neotree
     :init
     (progn
       (setq neo-window-width 23
             neo-theme 'arrow))))
 
-;; (defun nikki93/init-auto-complete ()
-;;   (use-package auto-complete
-;;     :config
-;;     (progn
-;;       (setq ac-quick-help-delay 1)
-;;       (define-key ac-complete-mode-map "\C-n" 'ac-next)
-;;       (define-key ac-complete-mode-map "\C-p" 'ac-previous))))
-
-;; (defun nikki93/init-company ()
-;;   (use-package company
-;;     :defer t
-;;     :config
-;;     (progn
-;;       (global-company-mode 1)           ; set company-global-modes to taste
-;;       (setq company-idle-delay 0.2
-;;             company-selection-wrap-around t)
-;;       (define-key company-active-map (kbd "\C-n") 'company-select-next)
-;;       (define-key company-active-map (kbd "\C-p") 'company-select-previous)
-;;       (define-key company-active-map (kbd "\C-j") 'company-select-next)
-;;       (define-key company-active-map (kbd "\C-k") 'company-select-previous)
-;;       (define-key company-active-map (kbd "\C-d") 'company-show-doc-buffer)
-;;       (define-key company-active-map (kbd "<tab>") 'company-complete)
-;;       (spacemacs|diminish company-mode " Ⓒ" " C"))))
-
-(defun nikki93/init-aggressive-indent ()
+(defun nikki93/post-init-aggressive-indent ()
   (use-package aggressive-indent
     :defer t
     :init
@@ -101,43 +62,42 @@
       ;; Mode-line icon
       (spacemacs|diminish paredit-mode " (Ⓟ)" " (P)"))))
 
-(defun nikki93/init-flycheck ()
-  (use-package flycheck
+;; (defun nikki93/post-init-flycheck ()
+;;   (use-package flycheck
+;;     :defer t
+;;     :config
+;;     (progn
+;;       (setq flycheck-display-errors-function 'flycheck-display-error-messages-unless-error-list))))
+
+(defun nikki93/post-init-tern ()
+  (use-package tern
     :defer t
     :config
     (progn
-      (define-key evil-normal-state-map "[e" 'flycheck-previous-error)
-      (define-key evil-normal-state-map "]e" 'flycheck-next-error)
+      (setq tern-command (append tern-command '("--no-port-file"))))))
 
-      ;; disable jshint since we prefer eslint checking
-      (setq-default flycheck-disabled-checkers
-                    (append flycheck-disabled-checkers
-                            '(javascript-jshint)))
-
-      ;; use eslint with web-mode for jsx files
-      (flycheck-add-mode 'javascript-eslint 'web-mode)
-
-      ;; disable json-jsonlist checking for json files
-      (setq-default flycheck-disabled-checkers
-                    (append flycheck-disabled-checkers
-                            '(json-jsonlist))))))
-
-(defun nikki93/init-skewer-mode ()
-  (use-package skewer-mode
-    :defer t
-    :init
-    (progn
-      (add-hook 'js2-mode-hook 'skewer-mode)
-      (add-hook 'css-mode-hook 'skewer-css-mode)
-      (add-hook 'html-mode-hook 'skewer-html-mode))))
-
-(defun nikki93/init-magit ()
+(defun nikki93/post-init-magit ()
   (use-package magit
     :defer t
     :config
     (progn
       (setq magit-save-some-buffers nil)
-      (setq magit-status-buffer-switch-function 'switch-to-buffer))))
+      (setq magit-display-buffer-function
+            (lambda (buffer)
+              (display-buffer
+               buffer (if (not (memq (with-current-buffer buffer major-mode)
+                                     '(magit-process-mode
+                                       magit-revision-mode
+                                       magit-diff-mode
+                                       magit-stash-mode)))
+                          '(display-buffer-same-window)
+                        nil))))
+
+      ;; i use M-n to switch to window n, so unbind these
+      (define-key magit-mode-map "\M-1" nil)
+      (define-key magit-mode-map "\M-2" nil)
+      (define-key magit-mode-map "\M-3" nil)
+      (define-key magit-mode-map "\M-4" nil))))
 
 (defun auctex/init-auctex ()
   (use-package tex
@@ -165,14 +125,5 @@
 
 (defun nikki93/init-elm-mode ())
 
-(defun nikki93/init-shm ()
-  (use-package shm
-    :defer t
-    :if haskell-enable-shm-support
-    :init
-    (add-hook 'haskell-mode-hook 'structured-haskell-mode)
-    :config
-    (progn
-      (set-face-background 'shm-current-face "#eee8d5")
-      (set-face-background 'shm-quarantine-face "lemonchiffon"))))
+(defun nikki93/init-darkroom ())
 
