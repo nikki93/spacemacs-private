@@ -1,56 +1,85 @@
-;; -*- mode: dotspacemacs -*-
+;; -*- mode: emacs-lisp -*-
 ;; This file is loaded by Spacemacs at startup.
 ;; It must be stored in your home directory.
 
 (defun dotspacemacs/layers ()
-  "Configuration Layers declaration."
+  "Configuration Layers declaration.
+You should not put any user code in this function besides modifying the variable
+values."
   (setq-default
+   ;; Base distribution to use. This is a layer contained in the directory
+   ;; `+distribution'. For now available distributions are `spacemacs-base'
+   ;; or `spacemacs'. (default 'spacemacs)
+   dotspacemacs-distribution 'spacemacs
+   ;; List of additional paths where to look for configuration layers.
+   ;; Paths must have a trailing slash (i.e. `~/.mycontribs/')
    dotspacemacs-configuration-layer-path '()
-   dotspacemacs-configuration-layers '(osx
-                                       version-control
-                                       git
-                                       fsharp
-                                       lua
-                                       auto-completion
-                                       syntax-checking
-                                       irony-mode
-                                       slime-nikki93
-                                       factor
-                                       clojure
-                                       purescript
-                                       (react :variables
-                                              js2-basic-offset 2
-                                              css-indent-offset 2
-                                              web-mode-markup-indent-offset 2
-                                              web-mode-css-indent-offset 2
-                                              web-mode-code-indent-offset 2
-                                              web-mode-attr-indent-offset 2)
-                                       haskell
-                                       python
-                                       racket
-                                       markdown
-                                       nikki93)
-   dotspacemacs-excluded-packages '(git-gutter-fringe)
-   dotspacemacs-additional-packages '(cyberpunk-theme
-                                      ag)
+   ;; List of configuration layers to load. If it is the symbol `all' instead
+   ;; of a list then all discovered layers will be installed.
+   dotspacemacs-configuration-layers
+   '(better-defaults
+     osx
+
+     version-control
+     git
+
+     syntax-checking
+     auto-completion
+     shell
+
+     lua
+     emacs-lisp
+     markdown
+     org
+     (react :variables
+            js2-basic-offset 2
+            css-indent-offset 2
+            web-mode-markup-indent-offset 2
+            web-mode-css-indent-offset 2
+            web-mode-code-indent-offset 2
+            web-mode-attr-indent-offset 2)
+     clojure
+     swift
+     ess
+
+     (wakatime :variables
+               wakatime-api-key "6d156eab-750c-4db1-8cc9-ea12c1d006a0"
+               wakatime-cli-path "/usr/local/bin/wakatime")
+
+     nikki93)
+   ;; List of additional packages that will be installed without being
+   ;; wrapped in a layer. If you need some configuration for these
+   ;; packages then consider to create a layer, you can also put the
+   ;; configuration in `dotspacemacs/config'.
+   dotspacemacs-additional-packages '(cyberpunk-theme)
+   ;; A list of packages and/or extensions that will not be install and loaded.
+   dotspacemacs-excluded-packages '()
+   ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
+   ;; are declared in a layer which is not a member of
+   ;; the list `dotspacemacs-configuration-layers'. (default t)
    dotspacemacs-delete-orphan-packages t))
 
 (defun dotspacemacs/init ()
   "Initialization function.
 This function is called at the very startup of Spacemacs initialization
-before layers configuration."
+before layers configuration.
+You should not put any user code in there besides modifying the variable
+values."
   (setq-default
    dotspacemacs-editing-style 'vim
    dotspacemacs-verbose-loading nil
    dotspacemacs-startup-banner 'official
-   dotspacemacs-always-show-changelog t
-   dotspacemacs-startup-lists nil
-   dotspacemacs-themes '(cyberpunk
-                         leuven
+   dotspacemacs-startup-lists '(recents projects)
+   dotspacemacs-themes '(
+                         spacemacs-dark
+                         cyberpunk
+                         spacemacs-light
                          solarized-light
                          solarized-dark
+                         leuven
                          monokai
-                         zenburn)
+                         zenburn
+                         )
    dotspacemacs-colorize-cursor-according-to-state t
    dotspacemacs-default-font (if (eq system-type 'windows-nt)
                                  '("Source Code Pro"
@@ -68,44 +97,58 @@ before layers configuration."
    dotspacemacs-major-mode-leader-key ";"
    dotspacemacs-major-mode-emacs-leader-key "C-M-m"
    dotspacemacs-command-key ":"
-   dotspacemacs-enable-paste-micro-state t
-   dotspacemacs-guide-key-delay 0.4
+   dotspacemacs-remap-Y-to-y$ t
+   dotspacemacs-auto-save-file-location 'cache
+   dotspacemacs-use-ido nil
+   dotspacemacs-helm-resize nil
+   dotspacemacs-helm-no-header nil
+   dotspacemacs-helm-position 'bottom
+   dotspacemacs-enable-paste-micro-state nil
+   dotspacemacs-which-key-delay 0.4
+   dotspacemacs-which-key-position 'bottom
    dotspacemacs-loading-progress-bar t
    dotspacemacs-fullscreen-at-startup nil
-   dotspacemacs-fullscreen-use-non-native nil
+   dotspacemacs-fullscreen-use-non-native t
    dotspacemacs-maximized-at-startup nil
-   dotspacemacs-active-transparency 70
-   dotspacemacs-inactive-transparency 70
+   dotspacemacs-active-transparency 0
+   dotspacemacs-inactive-transparency 0
    dotspacemacs-mode-line-unicode-symbols t
    dotspacemacs-smooth-scrolling t
    dotspacemacs-smartparens-strict-mode nil
+   dotspacemacs-highlight-delimiters 'all
    dotspacemacs-persistent-server nil
    dotspacemacs-search-tools '("ag" "pt" "ack" "grep")
    dotspacemacs-default-package-repository nil))
 
-(defun dotspacemacs/config ()
-  "Configuration function.
+
+(defun dotspacemacs/user-init ()
+  "Initialization function for user code.
+It is called immediately after `dotspacemacs/init'.  You are free to put any
+user code."
+  )
+
+(defun dotspacemacs/user-config ()
+  "Configuration function for user code.
  This function is called at the very end of Spacemacs initialization after
-layers configuration."
-  (set-frame-parameter (selected-frame) 'alpha '(85 85))
-  (add-to-list 'default-frame-alist '(alpha 85 85))
-
-  (remove-hook 'prog-mode-hook 'auto-complete-mode)
-  (remove-hook 'c-mode-common-hook 'ac-cc-mode-setup)
-  (setq ac-modes '(emacs-lisp-mode
-                   lisp-mode
-                   lisp-interaction-mode
-                   slime-repl-mode))
-  (setq company-global-modes '(c-mode
-                               cc-mode
-                               c++-mode
-                               objc-mode))
-
-  (add-hook 'lisp-mode-hook 'aggressive-indent-mode)
-  (load "~/quicklisp/log4slime-setup.el")
-  (global-log4slime-mode 1)
-
+layers configuration. You are free to put any user code."
   (setq powerline-default-separator nil)
+
+  ;; Transparency!
+  ;; (let ((transparency 85))
+  ;;   (set-frame-parameter (selected-frame) 'alpha `(,transparency ,transparency))
+  ;;   (add-to-list 'default-frame-alist `(alpha ,transparency ,transparency)))
+
+  ;; Reverse colors for the border to have nicer line
+  (set-face-inverse-video-p 'vertical-border nil)
+  (set-face-background 'vertical-border (face-background 'default))
+
+  ;; Set symbol for the border
+  (set-display-table-slot standard-display-table
+                          'vertical-border
+                          (make-glyph-code ?┃))
+
+  (set-frame-parameter (selected-frame) 'alpha '(100 100))
+  (add-to-list 'default-frame-alist '(alpha 100 100))
 
   (when (eq system-type 'windows-nt)
     (setq w32-lwindow-modifier 'hyper)
@@ -120,7 +163,7 @@ layers configuration."
 
   (setq-default fill-column 80)
 
-  (setq haskell-hoogle-command "hoogle"))
+  (add-to-list 'auto-mode-alist '("\\.js\\'" . react-mode)))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
@@ -129,18 +172,20 @@ layers configuration."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ahs-case-fold-search nil)
- '(ahs-default-range (quote ahs-range-whole-buffer))
- '(ahs-idle-interval 0.25)
- '(ahs-idle-timer 0 t)
- '(ahs-inhibit-face-list nil)
- '(paradox-github-token t)
- '(ring-bell-function (quote ignore) t)
  '(safe-local-variable-values
    (quote
-    ((nikki93/cgame-scratch-path . "/Users/nikki/Library/Application Support/LOVE/pgame/scratch-buf.lua")
-     (nikki93/cgame-scratch-path . "/Users/nikki/Library/Application Support/LOVE/love-test/scratch-buf.lua")
-     (nikki93/cgame-scratch-path . "/Users/nikki/Library/Application Support/LOVE/love-test/scratch.lua")))))
+    ((eval setq nikki93/exponent-scratch-path
+           (expand-file-name "./repl/scratch.js"
+                             (file-name-directory
+                              (let
+                                  ((d
+                                    (dir-locals-find-file ".")))
+                                (if
+                                    (stringp d)
+                                    d
+                                  (car d))))))
+     (nikki93/cgame-scratch-path . "/Users/nikki/Development/exp/fluxpybird/repl/scratch.js")
+     (nikki93/cgame-scratch-path . "/Users/nikki/Library/Application Support/LOVE/pgame/scratch-buf.lua")))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
